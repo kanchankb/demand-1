@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>मागणी Form</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		#demand-form {
+			max-width: 400px;
+			margin: 40px auto;
+			padding: 20px;
+			border: 1px solid #ccc;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+		#demand-form h2{
+			text-align: center;
+		}
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		
+		input[type="text"], input[type="tel"], textarea {
+			width: 100%;
+			padding: 10px;
+			margin-bottom: 20px;
+			border: 1px solid #ccc;
+		}
+		
+		.buttons button{
+			background-color: #4CAF50;
+			color: #fff;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		.buttons{
+			display: flex;
+			justify-content:space-around;
+		}
+		
+		input[type="submit"]:hover {
+			background-color: #3e8e41;
+		}
+		footer {
+			background-color: #f2f2f2;
+			padding: 10px;
+			text-align: center;
+			color: #666;
+			clear: both;
+		  }
+		  
+		  footer p {
+			margin: 0;
+		  }
+	</style>
+</head>
+<body>
+	<form id="demand-form" action="https://script.google.com/macros/s/AKfycbzR95Q5hOMsoLVc6KFWIXE3uWb_3sG2jEsgRGKb_nShUDA2xuTDoTxE-Qo1wsQmW8hU/exec" method="post">
+		<h2>मागणी</h2>
+		<label for="uname">Name (नाव):</label>
+		<input type="text" id="uname" name="uname" required autofocus><br><br>
+		<label for="mobile_number">Mobile Number (मोबाईल क्रमांक):</label>
+		<input type="tel" id="mobile_number" name="mobile_number" maxlength="10" required autofocus><br><br>
+		<label for="demand">Demand (मागणी):</label>
+		<textarea id="demand" name="demand" required autofocus></textarea><br><br>
+		<div class="buttons">
+			<button id="clickButton">SUBMIT</button>
+			<button id="clearButton" name="clear">CLEAR</button>
+		</div>
+	</form>
+	<footer>
+		<p>&copy; Digispect Technology-2024.</p>
+	</footer>
+	<script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            const form = document.getElementById('demand-form');
+            const formData = new FormData(form);
+            const params = new URLSearchParams();
+
+            for (const pair of formData.entries()) {
+                params.append(pair[0], pair[1]);
+            }
+
+            console.log('Submitting form with params:', params.toString());
+
+            fetch('https://script.google.com/macros/s/AKfycbzR95Q5hOMsoLVc6KFWIXE3uWb_3sG2jEsgRGKb_nShUDA2xuTDoTxE-Qo1wsQmW8hU/exec', {
+                method: 'POST',
+                body: params
+            }).then(response => response.text())  // Change to .text() to handle plain text
+                .then(data => {
+                    console.log('Response from server:', data);  // Log the plain text response
+                    if (data.trim() === 'Data Saved Successfully!') {  // Check for plain text response 'Success'
+                        const queryString = params.toString();
+                        console.log('Redirecting to:', 'display.html?' + queryString);  // Log the redirection URL
+                        window.location.href = 'display.html?' + queryString;
+                    } else {
+                        console.log('Error response from server:', data);
+                        alert('Error submitting form');
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('Error submitting form');
+                });
+        }
+    </script>
+</body>
+</html>
